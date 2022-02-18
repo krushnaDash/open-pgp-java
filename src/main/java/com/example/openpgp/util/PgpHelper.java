@@ -1,4 +1,4 @@
-package com.claims.risk.cdi.util;
+package com.example.openpgp.util;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;

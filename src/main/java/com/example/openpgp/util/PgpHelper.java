@@ -4,6 +4,7 @@ import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -114,7 +115,7 @@ public class PgpHelper {
 	 * @throws IOException
 	 * @throws PGPException
 	 */
-	public void decryptFileGPG(InputStream in, InputStream secKeyIn, InputStream pubKeyIn, char[] pass)
+	public void decryptFileGPG(InputStream in, OutputStream out, InputStream secKeyIn, InputStream pubKeyIn, char[] pass)
 			throws IOException, PGPException {
 		Security.addProvider(new BouncyCastleProvider());
 
@@ -178,10 +179,8 @@ public class PgpHelper {
 		while ((ch = inLd.read()) >= 0) {
 			bOut.write(ch);
 		}
-
-		System.out.println(bOut.toString());
-
-		// bOut.writeTo(new FileOutputStream(ld.getFileName()));
+		bOut.writeTo(out);
+		out.close();
 		// return bOut;
 
 	}
@@ -292,6 +291,14 @@ public class PgpHelper {
 
 		org.bouncycastle.openpgp.PGPUtil.writeFileToLiteralData(comData.open(bOut), PGPLiteralData.BINARY,
 				new File(fileName));
+		
+		// if you want use only byte array data to encrypt
+		
+		 /*PGPLiteralDataGenerator lData = new PGPLiteralDataGenerator();
+	        OutputStream pOut = lData.open(out, PGPLiteralDataGenerator.UTF8, "",arr.length, new Date());
+	        pOut.write(arr);*/
+		
+		
 
 		comData.close();
 
